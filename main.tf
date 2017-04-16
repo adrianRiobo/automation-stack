@@ -50,3 +50,13 @@ module "cycloid-alb" {
   subnets = ["${module.cycloid-public-subnet-1.public_subnet}", "${module.cycloid-public-subnet-2.public_subnet}"]
   vpc_id = "${module.cycloid-vpc.vpc}"
 }
+
+module "cycloid-rds" {
+  source = "./infrastructure/rds/mysql-default"
+  rds_name = "cycloid-rds"
+  subnets = ["${module.cycloid-public-subnet-1.public_subnet}", "${module.cycloid-public-subnet-2.public_subnet}"]
+  vpc_id = "${module.cycloid-vpc.vpc}"
+  database_name = "wordpress"
+  database_password = "wordpress"
+  database_username = "wordpress"
+}
