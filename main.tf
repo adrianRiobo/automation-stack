@@ -49,13 +49,14 @@ module "cycloid-alb" {
   alb_name = "cycloid-alb"
   subnets = ["${module.cycloid-public-subnet-1.public_subnet}", "${module.cycloid-public-subnet-2.public_subnet}"]
   vpc_id = "${module.cycloid-vpc.vpc}"
+  vpc_default_security_group_id = "${module.cycloid-vpc.vpc_default_security_group_id}"
 }
 
 module "cycloid-rds" {
   source = "./infrastructure/rds/mysql-default"
   rds_name = "cycloid-rds"
   subnets = ["${module.cycloid-public-subnet-1.public_subnet}", "${module.cycloid-public-subnet-2.public_subnet}"]
-  vpc_id = "${module.cycloid-vpc.vpc}"
+  vpc_default_security_group_id = "${module.cycloid-vpc.vpc_default_security_group_id}"
   database_name = "wordpress"
   database_password = "wordpress"
   database_username = "wordpress"

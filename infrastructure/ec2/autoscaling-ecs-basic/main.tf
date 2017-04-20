@@ -1,15 +1,28 @@
 
-variable "rds_name" {
-    description = "Name for rds instance"
+variable "autoscaling_name" {
+    description = "Name of the autoscaling"
 }
+
+variable "cluster_name" {
+    description = "Name of the cluster"
+}
+
+variable "ami" {
+    description = "ami"
+}
+
+variable "vpc_default_security_group_id" {
+    description = "Id for default security group in VPC"
+}
+
+variable "key_name" {
+    description = "key for user in instance"
+}
+
 
 variable "subnets" {
     description = "Subnets for rds instance"
     type = "list"
-}
-
-variable "vpc_id" {
-    description = "Id for VPC"
 }
 
 variable "database_name" {
@@ -24,33 +37,31 @@ variable "database_username" {
     description = "User for database"
 }
 
-resource "aws_db_subnet_group" "default" {
-  name        = "${var.rds_name}"
-  subnet_ids  = ["${var.subnets}"]
-  tags {
-    Name = "${var.rds_name}"
+variable "vpc_default_security_group_id" {
+    description = "Id for default security group in VPC"
+}
+
+resource "template_file" "user_data" {
+  template = "./../templates/basic-ecs-instance.tpl"
+  vars {
+    cluster_name = "${var.cluster_name}"
+  }
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
-resource "aws_security_group" "default" {
-  vpc_id = "${var.vpc_id}"
-  tags {
-    Name = "${var.rds_name}"
-  }
-}
-
-resource "aws_db_instance" "default" {
-  allocated_storage          = 5
-  engine                     = "mysql"
-  engine_version             = "5.6.27"
-  instance_class             = "db.t2.micro"
-  name                       = "${var.database_name}"
-  password                   = "${var.database_password}"
-  username                   = "${var.database_username}"
-  multi_az                   = "false"
-  vpc_security_group_ids     = ["${aws_security_group.default.id}"]
-  db_subnet_group_name       = "${aws_db_subnet_group.default}"
-  tags {
-    Name        = "${var.project}"
+resource "aws_launch_configuration" "collaborator" {
+  name = "${var.autoscaling_name}"
+  image_id = "${var.ami}"
+  instance_type = "t2.micro"
+  security_groups = ["${var.vpc_default_security_group_id}"]
+  associate_public_ip_address = false
+  ebs_optimized = false
+  key_name = "${var.key_name}"
+  iam_instance_profile = "${aws_iam_instance_profile.iam_profile.id}"
+  user_data = "${template_file.user_data.rendered}"
+  lifecycle {
+    create_before_destroy = true
   }
 }

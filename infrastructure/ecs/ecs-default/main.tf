@@ -1,6 +1,6 @@
 
-variable "alb_name" {
-    description = "Name for ALB"
+variable "cluster_name" {
+    description = "Name for the cluster"
 }
 
 variable "subnets" {
@@ -15,6 +15,23 @@ variable "vpc_id" {
 variable "vpc_default_security_group_id" {
     description = "Id for default security group in VPC"
 }
+
+data "aws_ecs_cluster" "default" {
+  cluster_name = "${var.cluster_name}"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 resource "aws_security_group" "allow_all" {
   name        = "${var.alb_name}"
@@ -34,7 +51,7 @@ resource "aws_alb" "default" {
   internal        = false
   subnets         = ["${var.subnets}"]
   security_groups = ["${aws_security_group.allow_all.id}", "${var.vpc_default_security_group_id}"]
-  enable_deletion_protection = false
+  enable_deletion_protection = true
   tags {
     Name = "${var.alb_name}"
   }

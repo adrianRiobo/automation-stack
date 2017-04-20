@@ -8,8 +8,8 @@ variable "subnets" {
     type = "list"
 }
 
-variable "vpc_id" {
-    description = "Id for VPC"
+variable "vpc_default_security_group_id" {
+    description = "Id for default security group in VPC"
 }
 
 variable "database_name" {
@@ -32,13 +32,6 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
-resource "aws_security_group" "default" {
-  vpc_id = "${var.vpc_id}"
-  tags {
-    Name = "${var.rds_name}"
-  }
-}
-
 resource "aws_db_instance" "default" {
   allocated_storage          = 5
   engine                     = "mysql"
@@ -48,9 +41,10 @@ resource "aws_db_instance" "default" {
   password                   = "${var.database_password}"
   username                   = "${var.database_username}"
   multi_az                   = "false"
-  vpc_security_group_ids     = ["${aws_security_group.default.id}"]
-  db_subnet_group_name       = "${aws_db_subnet_group.default}"
+  vpc_security_group_ids     = ["${var.vpc_default_security_group_id}"]
+  db_subnet_group_name       = "${aws_db_subnet_group.default.id}"
+  skip_final_snapshot        = "true"
   tags {
-    Name        = "${var.project}"
+    Name        = "${var.rds_name}"
   }
 }
