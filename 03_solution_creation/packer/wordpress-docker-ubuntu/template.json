@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "ansible_host": "default",
+    "ansible_connection": "docker",
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "ansible_file_path": ""
+  },
+  "builders": [{
+    "type": "docker",
+    "image": "ubuntu:16.04",
+    "commit": "true",
+    "run_command": ["-d", "-i", "-t", "--name", "{{user `ansible_host`}}", "{{.Image}}", "/bin/bash"],
+    "changes": [
+      "ENTRYPOINT run.sh"
+    ]
+  }],
+ "provisioners": [
+    {
+      "type": "shell",
+      "inline": ["apt-get update",
+                 "apt-get install -y python libjpeg-dev libpng12-dev"]
+    },
+    {
+      "type": "ansible",
+      "user": "root",
+      "playbook_file": "{{user `ansible_file_path`}}",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_host={{user `ansible_host`}} ansible_connection={{user `ansible_connection`}} wordpress_version=4.7.3"
+      ]
+    }
+  ],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "438685710879.dkr.ecr.eu-west-1.amazonaws.com/cycloid/wordpress-ubuntu",
+        "tag": "latest"
+      },
+      {
+        "type": "docker-push",
+        "aws_access_key": "{{user `aws_access_key`}}",
+        "aws_secret_key": "{{user `aws_secret_key`}}",
+        "ecr_login": "true",
+        "login_server": "https://438685710879.dkr.ecr.eu-west-1.amazonaws.com/cycloid/wordpress-ubuntu"
+      }
+    ]
+  ]
+}

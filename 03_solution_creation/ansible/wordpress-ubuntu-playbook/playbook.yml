@@ -1,0 +1,71 @@
+---
+- name: Wordpress playbook
+  hosts: all
+  vars:
+    wordpress_version: 4.7.3
+  tasks: 
+
+    - name: Install apache
+      apt: 
+        name: apache2
+        update_cache: yes
+    
+    - name: Install mysql clients
+      apt: name={{item}} state=installed
+      with_items:
+           - mysql-client
+
+    - name: Install PHP
+      apt: name={{item}} state=installed
+      with_items:
+           - php7.0
+           - libapache2-mod-php7.0
+           - php7.0-mcrypt
+           - php7.0-mysql
+
+    - name: Install pip python with ssl
+      apt: name={{item}} state=installed
+      with_items:
+           - python-pip
+           - libssl-dev
+
+    - name: Install ssl cert verification modules
+      shell: "pip install {{item}}"
+      with_items:
+           - urllib3
+           - pyopenssl
+           - pyasn1
+           - ndg-httpsclient
+
+    - name: Download Wordpress
+      get_url:
+          url=https://wordpress.org/wordpress-{{wordpress_version}}.tar.gz
+          dest=/tmp/wordpress.tar.gz
+          mode=0440
+
+    - name: Install Wordpress
+      shell: "{{item}}"
+      with_items:
+           - tar -xzf /tmp/wordpress.tar.gz -C /usr/src/
+           - rm /tmp/wordpress.tar.gz
+           - chown -R www-data:www-data /usr/src/wordpress
+           - rm /var/www/html/*
+           - cp -r /usr/src/wordpress/* /var/www/html/
+           - mv /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+
+    - name: Add helper scripts 
+      copy:
+        src: ./scripts
+        dest: /root
+        owner: root
+        group: root
+        mode: 0744
+
+    - name: Add main script for running wordpress
+      copy:
+        src: ./run.sh
+        dest: /usr/local/bin
+        owner: root
+        group: root
+        mode: 0744
+
