@@ -1,7 +1,7 @@
 # automation-stack
 This projects aim to show how to put together several tools to create an automated environment to deploy a solution
 
-##Infrastructure
+## Infrastructure
 
 All solution infrastucture is created in AWS. It uses terraform as infrastructure provisioner. It uses modules to allow re utilization and a better separation of concepts. 
 Related with the infrastructute we create some default resources and the expose its ids to allow reutilization in other templates.
@@ -18,11 +18,11 @@ point of entrance in our infrastructure
 * rds instance for wordpress database
 * docker private registry to push the docker image created with packer
 
-##Solution builder
+## Solution builder
 
 Once all infrastructure is setted up. We created a docker image for wordpress, we use packer which allow to make the creation process independent from docker, so we can use the same provisioner to build anything else (virtual image). Also we use ansible as configuration provisioner. In the end packer uses docker as builder and executes ansible as remote, for the building process a docker container is created with the base image and then ansible provisioner connects to it with ssh (we need to pre install python) and configures it. At the end of the process the post processor tag and push the image to our private registry.
 
-##Solution deployer
+## Solution deployer
 
 Again we create all the service definition with terraform. We pass all the variables related with the database connection as environment variables. This allow to configurate the container when is starting. The container also
 checks the database connetion before it starts the wordpress. 
@@ -31,7 +31,7 @@ The image is pulled from the private registry created with the infrastructure an
 
 A target group and a listener rules are created to allow communication with the service through the load balancer
 
-##Execution
+## Execution
 
 I create some bash script to allow all the execution you just need some credentials on aws with all the permissions
 needed. 
@@ -42,11 +42,11 @@ automation-stack.sh -a [ACCESS KEY] -s [SECRET KEY]
 
 Also I added some scripts all the stack of products needed: ansible, docker, packer, terraform
 
-##Known issues
+## Known issues
 
 Templates can be improved in several way. The amount of variables could be higher allowing more configuration options. Also some typical configuration is create a map of AMIs for the ami in the launch configuration. Due to time the ami is fixed for eu-west-1 region. So if region is changed the solution will not work. This could be changed in next commits.
 
-##Going into production
+## Going into production
 
 Although the solution is a good starting point it has several needs before going into production.
 
