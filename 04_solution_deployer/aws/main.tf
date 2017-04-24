@@ -12,6 +12,7 @@ module "cycloid_ubuntu_wordpress_solution" {
   db_password   = "${var.db_password}"
   db_database   = "${var.db_database}"
   cluster_id   = "${var.cluster_id}"
-  alb_arn   = "${var.alb_arn}"
+  vpc_id       = "${var.vpc_id}"
+  alb_listener_arn   = "${var.alb_listener_arn}"
   ecs_service_role_default_arn   = "${var.ecs_service_role_default_arn}"
 }

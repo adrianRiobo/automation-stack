@@ -1,9 +1,17 @@
+output "vpc_id" {
+  value = "${module.cycloid_vpc.vpc}"
+}
+
 output "alb_dns" {
   value = "${module.cycloid_alb.alb_dns}"
 }
 
 output "alb_arn" {
   value = "${module.cycloid_alb.alb_arn}"
+}
+
+output "alb_listener_arn" {
+  value = "${module.cycloid_alb.alb_listener_arn}"
 }
 
 output "rds_address" {

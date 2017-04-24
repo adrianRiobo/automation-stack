@@ -39,10 +39,10 @@ variable "cluster_id" {
 }
 
 variable "vpc_id" {
-    description = "VPC id"
+    description = "Main id for vpc"
 }
 
-variable "alb_arn" {
+variable "alb_listener_arn" {
     description = "ALB arn"
 }
 

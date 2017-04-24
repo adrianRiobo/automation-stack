@@ -1,4 +1,4 @@
-{
+[{
   "name": "wordpress-ubuntu",
   "image": "438685710879.dkr.ecr.eu-west-1.amazonaws.com/cycloid/wordpress-ubuntu",
   "memory": 878,
@@ -7,28 +7,28 @@
   "environment": [
     {
       "name": "WORDPRESS_DB_HOST",
-      "value": "${db_host}"
+      "value": "WORDPRESS_DB_HOST_VALUE"
     },
     {
       "name": "WORDPRESS_DB_PORT",
-      "value": "${db_port}"
+      "value": "WORDPRESS_DB_PORT_VALUE"
     },
     {
       "name": "WORDPRESS_DB_USER",
-      "value": "${db_user}"
+      "value": "WORDPRESS_DB_USER_VALUE"
     },
     {
       "name": "WORDPRESS_DB_PASSWORD",
-      "value": "${db_password}"
+      "value": "WORDPRESS_DB_PASSWORD_VALUE"
     },
     {
       "name": "WORDPRESS_DB_DATABASE",
-      "value": "${db_database}"
+      "value": "WORDPRESS_DB_DATABASE_VALUE"
     }
   ],
   "portMappings": [
     {
-      "containerPort": "80"
+      "containerPort": 80
     }
   ]
-}
+}]

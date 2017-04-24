@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "ecs_assume_role_policy_document" {
 }
 
 resource "aws_iam_role" "ecs_instance_role" {
-  name               = "${var.ecs_name}"
+  name               = "ecs-instance-role"
   path               = "/"
   assume_role_policy = "${data.aws_iam_policy_document.ecs_assume_role_policy_document.json}"
 }
@@ -62,7 +62,7 @@ data "aws_iam_policy_document" "ecs_instance_policy_document" {
 
 resource "aws_iam_policy" "ecs_instance_policy" {
     name        = "ecs-instance-policy"
-    description = "A test policy"
+    description = "Default policy for ecs instances"
     policy      = "${data.aws_iam_policy_document.ecs_instance_policy_document.json}"
 }
 
@@ -72,7 +72,7 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_policy_attach" {
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name  = "${var.ecs_name}"
+  name  = "ecs-instance-profile"
   role = "${aws_iam_role.ecs_instance_role.name}"
 }
 
@@ -88,9 +88,9 @@ data "aws_iam_policy_document" "ecs_service_assume_role_policy_document" {
 }
 
 resource "aws_iam_role" "ecs_service_role" {
-  name               = "${var.ecs_name}"
+  name               = "ecs-service-role"
   path               = "/"
-  assume_role_policy = "${data.aws_iam_policy_document.ecs_assume_role_policy_document.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.ecs_service_assume_role_policy_document.json}"
 }
 
 data "aws_iam_policy_document" "ecs_service_policy_document" {
@@ -112,8 +112,8 @@ data "aws_iam_policy_document" "ecs_service_policy_document" {
 }
 
 resource "aws_iam_policy" "ecs_service_policy" {
-    name        = "ecs-instance-policy"
-    description = "A test policy"
+    name        = "ecs-service-policy"
+    description = "Default policy for ecs services"
     policy      = "${data.aws_iam_policy_document.ecs_service_policy_document.json}"
 }
 
