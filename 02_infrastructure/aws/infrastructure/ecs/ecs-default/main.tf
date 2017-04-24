@@ -72,7 +72,7 @@ resource "aws_iam_role_policy_attachment" "ecs_instance_policy_attach" {
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name  = "ecs-instance-profile"
+  name  = "ecs-instance-prof"
   role = "${aws_iam_role.ecs_instance_role.name}"
 }
 

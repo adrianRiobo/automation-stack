@@ -31,7 +31,7 @@ done
 
 if [ -z "$ACCESS_KEY" ] || [ -z "$SECRET_KEY" ]; then usage; fi
 
-echo'Creating infrastructure'
+echo 'Creating infrastructure'
 
 mkdir -p outputs
 

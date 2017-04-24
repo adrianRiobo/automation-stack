@@ -49,6 +49,6 @@ terraform destroy -state=outputs/wordpress-service.tfstate -var "aws_access_key=
 
 rm 04_solution_deployer/aws/solutions/ubuntu-wordpress-solution/templates/ubuntu-wordpress-task-definition.json
 
-terraform apply -state=outputs/infrastructure.tfstate -var "aws_access_key=$ACCESS_KEY" -var "aws_secret_key=$SECRET_KEY" 02_infrastructure/aws/
+terraform destroy -state=outputs/infrastructure.tfstate -var "aws_access_key=$ACCESS_KEY" -var "aws_secret_key=$SECRET_KEY" 02_infrastructure/aws/
 
 rm -r outputs
