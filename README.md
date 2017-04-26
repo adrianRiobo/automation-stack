@@ -48,8 +48,11 @@ Templates can be improved in several way. The amount of variables could be highe
 
 ## Going into production
 
-Although the solution is a good starting point it has several needs before going into production.
+Although the solution is a good starting point it has several needs before going into production, some of them could be:
 
+* Add EFS to shared data volumes with multiple containers (shared paths)
+* Add route 53 to manage request with some rules for updating and geo location
+* Add cloudfront to manage ssl and geo replication in a wide range of areas
 * Expand Azs, at the time it is using just two, the best configuration is with three (it also expand the numbre of public/private subnets)
 * Rules for autoscaling at infrastructure level. We need some cloudwatch rules to scale up and down our scaling group to allow more service instances.
 * Rules for autoscaling at service level. As for infrastructure we need to scale up and down our service and again some cloud watch rules are needed.
